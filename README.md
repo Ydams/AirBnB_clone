@@ -9,4 +9,4 @@ The description of the command interpreter are as follows;
 
 The following Authors contributed to the success of this project;
 Damilola Yusuf- Damola4542@gmail.com
-Ehoneah Obed - 
+Ehoneah Obed - oehoneah@sandtech.com
