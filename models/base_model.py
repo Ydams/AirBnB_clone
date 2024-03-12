@@ -9,7 +9,7 @@ class BaseModel:
     Base class for all models.
     """
 
-    def __init__(self, **kwargs):
+    def __class__(self, **kwargs):
         """
         Initialize the instance.
 
