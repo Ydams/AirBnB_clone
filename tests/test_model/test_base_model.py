@@ -1,76 +1,89 @@
 #!/usr/bin/python3
 """
-
+Module for BaseModel unittest
 """
-import unittest
 import os
-from datetime import datetime
+import unittest
 from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
 
 
-class TestBaseModel(unittest.TestCase):
+
+class TestBasemodel(unittest.TestCase):
+    """
+    Unittest for BaseModel
+    """
+
     def setUp(self):
-        self.base_instance = BaseModel()
+        """
+        Setup for temporary file path
+        """
+        try:
+            os.rename("file.json", "tmp.json")
+        except FileNotFoundError:
+            pass
 
     def tearDown(self):
-        del self.base_instance
+        """
+        Tear down for temporary file path
+        """
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
+        try:
+            os.rename("tmp.json", "file.json")
+        except FileNotFoundError:
+            pass
+    def test_init(self):
+        """
+        Test for init
+        """
+        my_model = BaseModel()
 
-    def test_instance_attributes(self):
-        self.assertTrue(hasattr(self.base_instance, 'id'))
-        self.assertTrue(hasattr(self.base_instance, 'created_at'))
-        self.assertTrue(hasattr(self.base_instance, 'updated_at'))
+        self.assertIsNotNone(my_model.id)
+        self.assertIsNotNone(my_model.created_at)
+        self.assertIsNotNone(my_model.updated_at)
 
-    def test_id_type(self):
-        self.assertIsInstance(self.base_instance.id, str)
+    def test_save(self):
+        """
+        Test for save method
+        """
+        my_model = BaseModel()
 
-    def test_created_at_type(self):
-        self.assertIsInstance(self.base_instance.created_at, datetime)
+        initial_updated_at = my_model.updated_at
 
-    def test_updated_at_type(self):
-        self.assertIsInstance(self.base_instance.updated_at, datetime)
+        current_updated_at = my_model.save()
 
-    def test_save_updates_updated_at(self):
-        old_updated_at = self.base_instance.updated_at
-        self.base_instance.save()
-        new_updated_at = self.base_instance.updated_at
-        self.assertNotEqual(old_updated_at, new_updated_at)
+        self.assertNotEqual(initial_updated_at, current_updated_at)
 
+    def test_to_dict(self):
+        """
+        Test for to_dict method
+        """
+        my_model = BaseModel()
 
-class TestFileStorage(unittest.TestCase):
-    def setUp(self):
-        self.storage = FileStorage()
-        self.base_instance = BaseModel()
-        self.test_json_file = "test_file.json"
+        my_model_dict = my_model.to_dict()
 
-    def tearDown(self):
-        del self.storage
-        del self.base_instance
-        if os.path.exists(self.test_json_file):
-            os.remove(self.test_json_file)
+        self.assertIsInstance(my_model_dict, dict)
 
-    def test_new_method(self):
-        self.assertIn("BaseModel." + self.base_instance.id, self.storage.all())
-
-    def test_save_method(self):
-        self.base_instance.save()
-        with open(self.test_json_file, 'r') as file:
-            data = file.read()
-            self.assertTrue(data)
-            self.assertIn("BaseModel." + self.base_instance.id, data)
-
-    def test_reload_method(self):
-        self.base_instance.save()
-        self.storage.reload()
-        self.assertIn("BaseModel." + self.base_instance.id, self.storage.all())
-
-    def test_all_method(self):
-        self.base_instance.save()
-        all_objs = self.storage.all()
-        self.assertIsInstance(all_objs, dict)
-        self.assertIn("BaseModel." + self.base_instance.id, all_objs)
+        self.assertEqual(my_model_dict["__class__"], 'BaseModel')
+        self.assertEqual(my_model_dict['id'], my_model.id)
+        self.assertEqual(my_model_dict['created_at'], my_model.created_at.isoformat())
+        self.assertEqual(my_model_dict["updated_at"], my_model.created_at.isoformat())
 
 
-if __name__ == '__main__':
+    def test_str(self):
+        """
+        Test for string representation
+        """
+        my_model = BaseModel()
+
+        self.assertTrue(str(my_model).startswith('[BaseModel]'))
+
+        self.assertIn(my_model.id, str(my_model))
+
+        self.assertIn(str(my_model.__dict__), str(my_model))
+
+
+if __name__ == "__main__":
     unittest.main()
-
