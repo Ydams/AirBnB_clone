@@ -3,6 +3,9 @@
 import json
 import os
 from models.base_model import BaseModel
+    def get_base_model():
+        from models.base_model import BaseModel
+        return BaseModel
 
 class FileStorage:
     __file_path = "file.json"
@@ -18,8 +21,9 @@ class FileStorage:
         self.__objects[key] = obj
 
     def save(self):
-        """Serializes __objects to the JSON file (__file_path)"""
-        serialized_objs = {key: obj.to_dict() for key, obj in self.__objects.items()}
+        """
+        base_model = get_base_model()
+        """
         with open(self.__file_path, 'w') as file:
             json.dump(serialized_objs, file)
 

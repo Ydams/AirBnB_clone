@@ -4,7 +4,7 @@
 
 import uuid
 from datetime import datetime
-import models
+import models import get_storage
 
 class BaseModel:
    def __init__(self, *args, **kwargs):
@@ -71,7 +71,10 @@ class BaseModel:
         return new_dict
 
     def save(self):
-        storage.save()
+        """
+        storage = get_storage()
+        
+        """
 
 # Test the BaseModel
 if __name__ == "__main__":

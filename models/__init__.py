@@ -1,7 +1,12 @@
 #!/usr/bin/python3
 
-from models import storage
-from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
+
+def get_storage():
+    global storage
+    if 'storage' not in globals():
+        storage = FileStorage()
+    return storage
 
 # Reload objects from storage
 all_objs = storage.all()
