@@ -40,7 +40,7 @@ class BaseModel:
        class_name = self.__class__.__name__
        return f'[{self.__class__.__name__}] ({self.id}) {self.__dict__}'
 
-
+from models import storage
 import uuid
 from datetime import datetime
 
@@ -58,6 +58,7 @@ class BaseModel:
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
+            storage.new(self) # Add instance to filestorage
 
     def to_dict(self):
         """
@@ -68,6 +69,9 @@ class BaseModel:
         new_dict['created_at'] = self.created_at.strftime('%Y-%m-%dT%H:%M:%S.%f')
         new_dict['updated_at'] = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')
         return new_dict
+
+    def save(self):
+        storage.save()
 
 # Test the BaseModel
 if __name__ == "__main__":
