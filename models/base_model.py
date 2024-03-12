@@ -68,8 +68,7 @@ my_model_json = {
     'age': 30
 }
 
-my_new_model = BaseModel(**my_model_json)
+my_new_model = User(**my_model_json)
 print(my_new_model)
-
 
 
