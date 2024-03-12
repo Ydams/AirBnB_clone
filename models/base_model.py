@@ -40,24 +40,3 @@ class BaseModel:
        class_name = self.__class__.__name__
        return f'[{self.__class__.__name__}] ({self.id}) {self.__dict__}'
 
-
-
-import uuid
-from datetime import datetime
-
-class User(BaseModel):
-    def __init__(self, name, age, **kwargs):
-        super().__init__(**kwargs)
-        self.name = name
-        self.age = age
-
-my_model_json = {
-    'id': '123',
-    'created_at': '2022-01-01T00:00:00.000',
-    'updated_at': '2022-01-01T00:00:00.000',
-    'name': 'John Doe',
-    'age': 30
-}
-
-my_new_model = User(**my_model_json)
-print(my_new_model)
