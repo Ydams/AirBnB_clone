@@ -2,14 +2,16 @@
 
 import uuid
 from datetime import datetime
-import models
+
 
 class BaseModel:
     """
     Base class for all models.
+
+    :param kwargs: Arbitrary keyword arguments.
     """
 
-    def __class__(self, **kwargs):
+    def __init__(self, **kwargs):
         """
         Initialize the instance.
 
@@ -20,7 +22,7 @@ class BaseModel:
         self.updated_at = kwargs.get('updated_at', datetime.now())
 
         for key, value in kwargs.items():
-            if key not in ['id', 'created_at', 'updated_at']:
+            if key != '__class__':
                 if key in ['created_at', 'updated_at']:
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                 setattr(self, key, value)
@@ -49,7 +51,6 @@ class BaseModel:
         class_name = self.__class__.__name__
         return f'[{class_name}] ({self.id}) {self.__dict__}'
 
-    
 
 import uuid
 from datetime import datetime
@@ -70,5 +71,3 @@ my_model_json = {
 
 my_new_model = User(**my_model_json)
 print(my_new_model)
-
-
