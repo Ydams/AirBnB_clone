@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""This file execute what the command interpreter gives it"""
+
 
 import cmd
 
